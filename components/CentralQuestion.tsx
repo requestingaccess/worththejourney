@@ -124,7 +124,8 @@ const GlitchButton: React.FC<GlitchButtonProps> = ({ text, onClick, className = 
       onTouchStart={handleTouchStart}
       onClick={handleClick}
       className={`
-        relative group px-8 py-3 
+        relative group 
+        px-6 py-2 md:px-8 md:py-3 
         border border-white/30 
         bg-black/60 backdrop-blur-md
         overflow-hidden
@@ -143,7 +144,7 @@ const GlitchButton: React.FC<GlitchButtonProps> = ({ text, onClick, className = 
       <div className={`absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay pointer-events-none ${activeNoise}`} />
 
       {/* Text */}
-      <span className={`relative z-10 font-bold text-sm tracking-[0.3em] uppercase transition-colors duration-200 drop-shadow-[0_0_5px_rgba(0,0,0,1)] ${activeText}`}>
+      <span className={`relative z-10 font-bold text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase transition-colors duration-200 drop-shadow-[0_0_5px_rgba(0,0,0,1)] ${activeText}`}>
         {displayText}
       </span>
     </button>
@@ -160,7 +161,7 @@ export const CentralQuestion: React.FC<CentralQuestionProps> = ({ onShatter }) =
       zIndexRange={[100, 0]}
       transform // This makes the HTML behave like a 3D object in the scene
     >
-      <div className="flex flex-col items-center justify-center w-[600px] h-60 font-sans select-none">
+      <div className="flex flex-col items-center justify-center w-[90vw] max-w-[600px] h-auto py-8 font-sans select-none">
         {step === 0 ? (
           <GlitchButton 
             text="worth?" 
@@ -169,14 +170,14 @@ export const CentralQuestion: React.FC<CentralQuestionProps> = ({ onShatter }) =
             }} 
           />
         ) : (
-          <div className="flex flex-col items-center gap-8 animate-in fade-in zoom-in duration-500">
-            <div className="bg-black/50 backdrop-blur-sm px-6 py-2 border-l-2 border-r-2 border-red-500/50">
-              <h2 className="text-white text-sm tracking-[0.4em] uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+          <div className="flex flex-col items-center gap-6 md:gap-8 animate-in fade-in zoom-in duration-500 w-full">
+            <div className="bg-black/50 backdrop-blur-sm px-4 py-2 md:px-6 md:py-2 border-l-2 border-r-2 border-red-500/50">
+              <h2 className="text-white text-[0.7rem] md:text-sm tracking-[0.2em] md:tracking-[0.4em] uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] whitespace-nowrap">
                 do you have worth?
               </h2>
             </div>
             
-            <div className="flex gap-16">
+            <div className="flex gap-4 md:gap-16">
               <GlitchButton 
                 text="yes" 
                 onClick={(e) => {
