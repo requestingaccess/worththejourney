@@ -62,9 +62,7 @@ const Scene = ({ mode, onShatter }: { mode: AppMode, onShatter: () => void }) =>
       {/* Camera Control */}
       <Rig />
 
-      {/* Lighting */}
-      <ambientLight intensity={0.5} />
-      <spotLight position={[0, 0, 10]} angle={0.5} penumbra={1} intensity={2} />
+      {/* Lighting Removed: Materials are MeshBasicMaterial (Unlit) so lights were wasted overhead */}
       
       {/* Content */}
       <group>
@@ -81,7 +79,8 @@ const Scene = ({ mode, onShatter }: { mode: AppMode, onShatter: () => void }) =>
       </group>
 
       {/* Post Processing for the "Noise" look */}
-      <EffectComposer enableNormalPass={false}>
+      {/* multisampling={0} significantly increases performance on high-DPI screens */}
+      <EffectComposer enableNormalPass={false} multisampling={0}>
         <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} height={300} opacity={1.5} />
         <Noise opacity={0.15} />
         <Vignette eskil={false} offset={0.1} darkness={1.1} />
@@ -111,7 +110,8 @@ const App: React.FC = () => {
     <div className="relative w-full h-full bg-black overflow-hidden">
       {/* 3D Canvas */}
       <div className={`w-full h-full transition-opacity duration-1000 ${mode === AppMode.SILENCE ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-        <Canvas camera={{ position: [0, 0, 2], fov: 75 }}>
+        {/* dpr prop capped to 1.5 to prevent massive render cost on Retina/High-DPI screens */}
+        <Canvas camera={{ position: [0, 0, 2], fov: 75 }} dpr={[1, 1.5]}>
           <Suspense fallback={null}>
             <Scene mode={mode} onShatter={() => setMode(AppMode.SHATTER)} />
           </Suspense>

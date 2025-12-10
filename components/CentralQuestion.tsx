@@ -23,7 +23,6 @@ const GlitchButton: React.FC<GlitchButtonProps> = ({ text, onClick, className = 
   const [isActive, setIsActive] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // Cleanup interval on unmount
   useEffect(() => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -39,7 +38,6 @@ const GlitchButton: React.FC<GlitchButtonProps> = ({ text, onClick, className = 
   // Handle outside clicks/touches to reset state
   useEffect(() => {
     const handleOutsideInteraction = (event: Event) => {
-      // If button is active and the click/touch target is NOT inside this button
       if (isActive && buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
         stopScramble();
       }
@@ -83,7 +81,6 @@ const GlitchButton: React.FC<GlitchButtonProps> = ({ text, onClick, className = 
     isTouchRef.current = true;
   };
 
-  // Explicitly ignore mouse events if touch is detected to prevent phantom resets
   const handleMouseEnter = () => {
     if (isTouchRef.current) return;
     startScramble();
@@ -99,18 +96,14 @@ const GlitchButton: React.FC<GlitchButtonProps> = ({ text, onClick, className = 
     
     if (isTouchRef.current) {
       if (!isActive) {
-        // First tap on mobile: Trigger visual effects only
         setIsActive(true);
         startScramble(); 
         return;
       }
     }
-    
-    // Second tap (or desktop click): Execute action
     onClick(e);
   };
 
-  // Conditional classes to force hover styles when isActive is true (for mobile)
   const activeBorder = isActive ? 'border-red-500 shadow-[0_0_25px_rgba(220,38,38,0.6)] scale-105 -skew-x-6' : '';
   const activeBg = isActive ? 'translate-x-[200%]' : 'group-hover:translate-x-[200%]';
   const activeNoise = isActive ? 'opacity-10' : 'opacity-0 group-hover:opacity-10';
@@ -125,7 +118,8 @@ const GlitchButton: React.FC<GlitchButtonProps> = ({ text, onClick, className = 
       onClick={handleClick}
       className={`
         relative group 
-        px-6 py-2 md:px-8 md:py-3 
+        w-full sm:w-auto
+        px-6 py-3 sm:px-8 sm:py-4
         border border-white/30 
         bg-black/60 backdrop-blur-md
         overflow-hidden
@@ -137,14 +131,9 @@ const GlitchButton: React.FC<GlitchButtonProps> = ({ text, onClick, className = 
         ${className}
       `}
     >
-      {/* Background Sweep */}
       <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-red-600/20 to-transparent -translate-x-[200%] transition-transform duration-700 ease-in-out ${activeBg}`} />
-      
-      {/* Glitch Overlay */}
       <div className={`absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay pointer-events-none ${activeNoise}`} />
-
-      {/* Text */}
-      <span className={`relative z-10 font-bold text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase transition-colors duration-200 drop-shadow-[0_0_5px_rgba(0,0,0,1)] ${activeText}`}>
+      <span className={`relative z-10 font-bold text-sm sm:text-base tracking-[0.2em] sm:tracking-[0.3em] uppercase transition-colors duration-200 drop-shadow-[0_0_5px_rgba(0,0,0,1)] ${activeText}`}>
         {displayText}
       </span>
     </button>
@@ -156,12 +145,12 @@ export const CentralQuestion: React.FC<CentralQuestionProps> = ({ onShatter }) =
 
   return (
     <Html
-      position={[0, 0, -4]} // Placed inside the tunnel
+      position={[0, 0, -4]}
       center
       zIndexRange={[100, 0]}
-      transform // This makes the HTML behave like a 3D object in the scene
+      transform
     >
-      <div className="flex flex-col items-center justify-center w-[90vw] max-w-[600px] h-auto py-8 font-sans select-none">
+      <div className="w-[90vw] max-w-[500px] flex flex-col items-center justify-center font-sans select-none p-4">
         {step === 0 ? (
           <GlitchButton 
             text="worth?" 
@@ -170,14 +159,15 @@ export const CentralQuestion: React.FC<CentralQuestionProps> = ({ onShatter }) =
             }} 
           />
         ) : (
-          <div className="flex flex-col items-center gap-6 md:gap-8 animate-in fade-in zoom-in duration-500 w-full">
-            <div className="bg-black/50 backdrop-blur-sm px-4 py-2 md:px-6 md:py-2 border-l-2 border-r-2 border-red-500/50">
-              <h2 className="text-white text-[0.7rem] md:text-sm tracking-[0.2em] md:tracking-[0.4em] uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] whitespace-nowrap">
+          <div className="flex flex-col items-center gap-6 w-full animate-in fade-in zoom-in duration-500">
+            <div className="bg-black/60 backdrop-blur-sm px-6 py-4 border-l-2 border-r-2 border-red-500/50 w-full text-center shadow-lg">
+              <h2 className="text-white text-base sm:text-lg md:text-xl font-bold tracking-[0.2em] uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] leading-relaxed">
                 do you have worth?
               </h2>
             </div>
             
-            <div className="flex gap-4 md:gap-16">
+            {/* Wrap flex container for very small screens */}
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 justify-center w-full">
               <GlitchButton 
                 text="yes" 
                 onClick={(e) => {
