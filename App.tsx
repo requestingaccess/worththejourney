@@ -8,7 +8,6 @@ import { SilenceView } from './components/SilenceView';
 import { CentralQuestion } from './components/CentralQuestion';
 import { AppMode } from './types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Volume2, VolumeX } from 'lucide-react';
 import * as THREE from 'three';
 
 // Camera Rig for Parallax Effect
@@ -92,7 +91,6 @@ const Scene = ({ mode, onShatter }: { mode: AppMode, onShatter: () => void }) =>
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<AppMode>(AppMode.NOISE);
-  const [audioEnabled, setAudioEnabled] = useState(false);
 
   // Handle transition from shatter to silence
   useEffect(() => {
@@ -122,14 +120,6 @@ const App: React.FC = () => {
       {mode === AppMode.SILENCE && (
         <SilenceView onReset={(e) => { e.stopPropagation(); reset(); }} />
       )}
-
-      {/* Audio Toggle (Simulated) */}
-      <button 
-        onClick={(e) => { e.stopPropagation(); setAudioEnabled(!audioEnabled); }}
-        className="absolute top-6 right-6 z-50 text-white/30 hover:text-white transition-colors p-2"
-      >
-        {audioEnabled ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
-      </button>
 
       {/* Flash Effect Overlay */}
       <AnimatePresence>

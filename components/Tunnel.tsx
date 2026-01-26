@@ -4,6 +4,7 @@ import { Text3D, Center } from '@react-three/drei';
 import * as THREE from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+import '../types';
 
 // Extend TextGeometry so we can instantiate it for measurements
 extend({ TextGeometry });
